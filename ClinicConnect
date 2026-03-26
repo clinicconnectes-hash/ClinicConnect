@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clinic Connect — Recepcionista IA para clínicas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 15px;
+    line-height: 1.65;
+    color: #1A1A18;
+    background: #FAFAF8;
+  }
+
+  .page { max-width: 820px; margin: 0 auto; padding: 0 1.5rem 5rem; }
+
+  .serif { font-family: 'Instrument Serif', serif; }
+
+  .sec {
+    padding: 3.5rem 0;
+    border-bottom: 1px solid #E0DED8;
+  }
+  .sec:last-child { border-bottom: none; }
+
+  .accent-line {
+    width: 32px; height: 2px;
+    background: #1A1A18;
+    margin-bottom: 1.5rem;
+  }
+
+  .tag {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: #6B6B67;
+    border: 1px solid #E0DED8;
+    border-radius: 2px;
+    padding: 3px 10px;
+    margin-bottom: 1.25rem;
+  }
+
+  h1.hero-h {
+    font-family: 'Instrument Serif', serif;
+    font-size: 50px;
+    font-weight: 400;
+    line-height: 1.1;
+    letter-spacing: -.02em;
+    margin-bottom: 1.25rem;
+  }
+  h1.hero-h span { font-style: italic; color: #6B6B67; }
+
+  .hero-sub {
+    font-size: 17px;
+    color: #6B6B67;
+    max-width: 540px;
+    margin-bottom: 2.25rem;
+    line-height: 1.7;
+  }
+
+  .btn-wrap { display: flex; align-items: center; gap: .5rem; flex-wrap: wrap; }
+
+  .btn-primary {
+    display: inline-block;
+    background: #1A1A18;
+    color: #FAFAF8;
+    padding: 14px 28px;
+    border-radius: 2px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    text-decoration: none;
+    letter-spacing: .01em;
+    font-family: 'IBM Plex Sans', sans-serif;
+  }
+  .btn-primary:hover { background: #2C2C2A; }
+
+  .btn-ghost {
+    display: inline-block;
+    font-size: 14px;
+    color: #6B6B67;
+    padding: 14px 20px;
+    cursor: pointer;
+    text-decoration: none;
+    font-family: 'IBM Plex Sans', sans-serif;
+  }
+  .btn-ghost:hover { color: #1A1A18; }
+
+  .sec-title {
+    font-family: 'Instrument Serif', serif;
+    font-size: 32px;
+    font-weight: 400;
+    margin-bottom: .6rem;
+    line-height: 1.2;
+  }
+  .sec-sub {
+    font-size: 14px;
+    color: #6B6B67;
+    margin-bottom: 2rem;
+    max-width: 520px;
+    line-height: 1.65;
+  }
+
+  /* STATS */
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+  .stat {
+    background: #F1EFE8;
+    border-radius: 8px;
+    padding: 1.4rem 1.1rem;
+  }
+  .stat-n {
+    font-family: 'Instrument Serif', serif;
+    font-size: 38px;
+    display: block;
+    margin-bottom: 6px;
+    color: #1A1A18;
+  }
+  .stat-l { font-size: 12px; color: #6B6B67; line-height: 1.45; }
+
+  /* VS TABLE */
+  .vs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-top: 1.5rem;
+  }
+  .vs-card {
+    border: 1px solid #E0DED8;
+    border-radius: 12px;
+    padding: 1.4rem;
+    background: #FFFFFF;
+  }
+  .vs-card.featured { border: 2px solid #B4B2A9; }
+  .vs-card h4 {
+    font-size: 11px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: .09em;
+    color: #6B6B67;
+    margin-bottom: 1rem;
+    padding-bottom: .75rem;
+    border-bottom: 1px solid #E0DED8;
+  }
+  .vs-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 6px 0;
+    border-bottom: 1px solid #F1EFE8;
+    gap: 8px;
+    font-size: 13px;
+  }
+  .vs-row:last-child { border-bottom: none; }
+  .vs-row .k { color: #6B6B67; }
+  .vs-row .v { font-weight: 500; text-align: right; }
+
+  /* STEPS */
+  .steps { margin-top: 1.5rem; }
+  .step {
+    display: grid;
+    grid-template-columns: 36px 1fr;
+    gap: 1rem;
+    padding: 1.4rem 0;
+    border-bottom: 1px solid #E0DED8;
+    align-items: start;
+  }
+  .step:last-child { border-bottom: none; }
+  .step-n {
+    font-family: 'Instrument Serif', serif;
+    font-size: 24px;
+    color: #B4B2A9;
+    padding-top: 1px;
+  }
+  .step h4 { font-size: 15px; font-weight: 500; margin-bottom: 5px; }
+  .step p { font-size: 13px; color: #6B6B67; line-height: 1.6; }
+
+  /* PLANS */
+  .plans {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: .85rem;
+    margin-top: 1.5rem;
+  }
+  .plan {
+    border: 1px solid #E0DED8;
+    border-radius: 12px;
+    padding: 1.4rem;
+    background: #FFFFFF;
+  }
+  .plan.main { border: 2px solid #B4B2A9; }
+  .plan-badge {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 500;
+    background: #F1EFE8;
+    color: #6B6B67;
+    padding: 3px 8px;
+    border-radius: 2px;
+    margin-bottom: .85rem;
+    letter-spacing: .07em;
+    text-transform: uppercase;
+  }
+  .plan h3 {
+    font-family: 'Instrument Serif', serif;
+    font-size: 20px;
+    font-weight: 400;
+    margin-bottom: .4rem;
+  }
+  .plan .plan-desc {
+    font-size: 12px;
+    color: #6B6B67;
+    margin-bottom: 1.1rem;
+    line-height: 1.55;
+    min-height: 40px;
+  }
+  .plan ul { list-style: none; }
+  .plan ul li {
+    font-size: 12px;
+    color: #6B6B67;
+    padding: 5px 0;
+    border-bottom: 1px solid #F1EFE8;
+    display: flex;
+    gap: 9px;
+    align-items: flex-start;
+    line-height: 1.45;
+  }
+  .plan ul li:last-child { border-bottom: none; }
+  .dot {
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: #B4B2A9;
+    flex-shrink: 0;
+    margin-top: 5px;
+  }
+  .dot.g { background: #3B6D11; }
+
+  /* INCLUDES */
+  .incl {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: .85rem;
+    margin-top: 1.5rem;
+  }
+  .incl-item {
+    background: #F1EFE8;
+    border-radius: 8px;
+    padding: 1.1rem 1.25rem;
+  }
+  .incl-item .it { font-size: 14px; font-weight: 500; margin-bottom: 5px; }
+  .incl-item .id { font-size: 12px; color: #6B6B67; line-height: 1.5; }
+
+  /* FAQ */
+  .faq-item {
+    padding: 1.4rem 0;
+    border-bottom: 1px solid #E0DED8;
+  }
+  .faq-item:last-child { border-bottom: none; }
+  .faq-q { font-size: 15px; font-weight: 500; margin-bottom: .5rem; }
+  .faq-a { font-size: 13px; color: #6B6B67; line-height: 1.65; }
+
+  /* CTA FINAL */
+  .cta-box {
+    background: #F1EFE8;
+    border-radius: 12px;
+    padding: 3rem 2.5rem;
+    text-align: center;
+    margin-top: 2rem;
+  }
+  .cta-box h2 {
+    font-family: 'Instrument Serif', serif;
+    font-size: 32px;
+    font-weight: 400;
+    margin-bottom: .85rem;
+    line-height: 1.2;
+  }
+  .cta-box p {
+    font-size: 15px;
+    color: #6B6B67;
+    margin-bottom: 2rem;
+    line-height: 1.65;
+  }
+  .cta-note {
+    font-size: 12px;
+    color: #6B6B67;
+    margin-top: 1.1rem;
+    display: block;
+  }
+  .cta-btns {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: .5rem;
+    flex-wrap: wrap;
+  }
+
+  /* FOOTER */
+  .footer {
+    padding: 2rem 0 0;
+    text-align: center;
+    font-size: 12px;
+    color: #B4B2A9;
+  }
+
+  @media (max-width: 600px) {
+    h1.hero-h { font-size: 34px; }
+    .sec-title { font-size: 26px; }
+    .stats { grid-template-columns: 1fr; }
+    .vs { grid-template-columns: 1fr; }
+    .plans { grid-template-columns: 1fr; }
+    .incl { grid-template-columns: 1fr; }
+    .cta-box { padding: 2rem 1.25rem; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- HERO -->
+  <div class="sec" style="padding-top:3rem">
+    <span class="tag">Recepcionista con IA · Clínicas en España</span>
+    <h1 class="hero-h">Tu clínica atiende<br>llamadas. <span>Incluso<br>cuando no estás.</span></h1>
+    <p class="hero-sub">Un asistente de voz con IA coge el teléfono, responde dudas y reserva citas directamente en tu agenda — las 24 horas, sin contratar a nadie más.</p>
+    <div class="btn-wrap">
+      <a href="https://calendly.com/cliniconnect/30min" target="_blank" class="btn-primary">→ Agenda una llamada de 20 min</a>
+      <a href="https://wa.me/34747496725" target="_blank" class="btn-ghost">o escríbeme por WhatsApp</a>
+    </div>
+  </div>
+
+  <!-- PROBLEMA / ROI -->
+  <div class="sec">
+    <div class="accent-line"></div>
+    <h2 class="sec-title">Cada llamada perdida es un paciente que se va a la competencia</h2>
+    <p class="sec-sub">Y la mayoría se pierden no porque tu clínica sea mala — sino porque nadie cogió el teléfono a tiempo.</p>
+    <div class="stats">
+      <div class="stat">
+        <span class="stat-n">67%</span>
+        <span class="stat-l">de las llamadas perdidas no vuelven a intentarlo</span>
+      </div>
+      <div class="stat">
+        <span class="stat-n">40%</span>
+        <span class="stat-l">de las llamadas entran fuera del horario de atención</span>
+      </div>
+      <div class="stat">
+        <span class="stat-n">1 de 4</span>
+        <span class="stat-l">pacientes cancela si no recibe confirmación</span>
+      </div>
+    </div>
+    <div class="vs">
+      <div class="vs-card">
+        <h4>Recepcionista humana</h4>
+        <div class="vs-row"><span class="k">Coste mensual</span><span class="v">1.600 – 2.100 €</span></div>
+        <div class="vs-row"><span class="k">Disponibilidad</span><span class="v">8h/día, L–V</span></div>
+        <div class="vs-row"><span class="k">Llamadas simultáneas</span><span class="v">1</span></div>
+        <div class="vs-row"><span class="k">Bajas y ausencias</span><span class="v">Sí</span></div>
+        <div class="vs-row"><span class="k">Recordatorios automáticos</span><span class="v">No</span></div>
+        <div class="vs-row"><span class="k">Reseñas de Google</span><span class="v">Manual o ninguno</span></div>
+      </div>
+      <div class="vs-card featured">
+        <h4>Asistente IA · Clinic Connect</h4>
+        <div class="vs-row"><span class="k">Coste mensual</span><span class="v">Consultar</span></div>
+        <div class="vs-row"><span class="k">Disponibilidad</span><span class="v">24h/día, 7 días</span></div>
+        <div class="vs-row"><span class="k">Llamadas simultáneas</span><span class="v">Ilimitadas</span></div>
+        <div class="vs-row"><span class="k">Bajas y ausencias</span><span class="v">No aplica</span></div>
+        <div class="vs-row"><span class="k">Recordatorios automáticos</span><span class="v">Incluidos</span></div>
+        <div class="vs-row"><span class="k">Reseñas de Google</span><span class="v">Automatizadas</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PLANES -->
+  <div class="sec">
+    <div class="accent-line"></div>
+    <h2 class="sec-title">Tres servicios. Un solo objetivo.</h2>
+    <p class="sec-sub">Elige lo que necesita tu clínica ahora mismo — o combínalos.</p>
+    <div class="plans">
+      <div class="plan main">
+        <div class="plan-badge">más contratado</div>
+        <h3>Recepcionista IA Full-time</h3>
+        <p class="plan-desc">Tu clínica nunca más pierde una llamada. Atiende, informa y reserva 24/7.</p>
+        <ul>
+          <li><span class="dot g"></span>Atención telefónica 24h, todos los días</li>
+          <li><span class="dot g"></span>Reserva de citas directa en tu agenda</li>
+          <li><span class="dot g"></span>Recordatorios automáticos para reducir ausencias</li>
+          <li><span class="dot g"></span>Escalado a humano si es necesario</li>
+          <li><span class="dot g"></span>Tu número de teléfono no cambia</li>
+          <li><span class="dot g"></span>Informe mensual de llamadas y citas</li>
+        </ul>
+      </div>
+      <div class="plan">
+        <div class="plan-badge">complementario</div>
+        <h3>Recepcionista IA Part-time</h3>
+        <p class="plan-desc">El asistente solo trabaja cuando tu equipo no puede — fuera de horario o en horas punta.</p>
+        <ul>
+          <li><span class="dot"></span>Cobertura en horario definido contigo</li>
+          <li><span class="dot"></span>Ideal para fines de semana y festivos</li>
+          <li><span class="dot"></span>Reserva de citas y toma de mensajes</li>
+          <li><span class="dot"></span>Mismo número, sin cambios visibles</li>
+        </ul>
+      </div>
+      <div class="plan">
+        <div class="plan-badge">extra</div>
+        <h3>Automatización de reseñas</h3>
+        <p class="plan-desc">Más reseñas en Google sin pedírselas manualmente a cada paciente.</p>
+        <ul>
+          <li><span class="dot"></span>Envío automático tras cada cita completada</li>
+          <li><span class="dot"></span>Mensaje personalizado para tu clínica</li>
+          <li><span class="dot"></span>Filtra antes de que llegue a Google</li>
+          <li><span class="dot"></span>Compatible con WhatsApp o SMS</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- CÓMO FUNCIONA -->
+  <div class="sec">
+    <div class="accent-line"></div>
+    <h2 class="sec-title">De cero a activo en menos de dos semanas</h2>
+    <p class="sec-sub">Sin tecnicismos. Sin que tengas que tocar nada.</p>
+    <div class="steps">
+      <div class="step">
+        <span class="step-n">01</span>
+        <div>
+          <h4>Llamada de diagnóstico (20 min)</h4>
+          <p>Entiendo cómo funciona tu clínica: servicios, horarios, cómo gestionáis las citas. Sin formularios ni presentaciones.</p>
+        </div>
+      </div>
+      <div class="step">
+        <span class="step-n">02</span>
+        <div>
+          <h4>Configuración y pruebas</h4>
+          <p>Construyo el asistente con la voz, el tono y la información de tu clínica. Lo conectamos a tu agenda. Te muestro cómo suena antes de activarlo.</p>
+        </div>
+      </div>
+      <div class="step">
+        <span class="step-n">03</span>
+        <div>
+          <h4>Lo activas. Funciona.</h4>
+          <p>Tu número no cambia. Tus pacientes no notan nada raro. Tu equipo deja de interrumpir lo que está haciendo para coger el teléfono.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- QUÉ INCLUYE -->
+  <div class="sec">
+    <div class="accent-line"></div>
+    <h2 class="sec-title">Qué incluye</h2>
+    <p class="sec-sub">Todo lo que necesitas para que funcione desde el primer día.</p>
+    <div class="incl">
+      <div class="incl-item">
+        <div class="it">Voz natural en español</div>
+        <div class="id">No suena a robot. La voz está entrenada para conversaciones médicas con fluidez real.</div>
+      </div>
+      <div class="incl-item">
+        <div class="it">Tu número no cambia</div>
+        <div class="id">Los pacientes siguen llamando al mismo número. El cambio es invisible para ellos.</div>
+      </div>
+      <div class="incl-item">
+        <div class="it">Conexión con tu agenda</div>
+        <div class="id">Compatible con Google Calendar y los principales sistemas de gestión de clínicas.</div>
+      </div>
+      <div class="incl-item">
+        <div class="it">RGPD cumplido</div>
+        <div class="id">El contrato incluye las cláusulas necesarias. Los pacientes son informados si la llamada se graba.</div>
+      </div>
+      <div class="incl-item">
+        <div class="it">Escalado a humano</div>
+        <div class="id">Si no puede resolver algo, transfiere la llamada o deja nota para que alguien devuelva la llamada.</div>
+      </div>
+      <div class="incl-item">
+        <div class="it">Soporte y ajustes continuos</div>
+        <div class="id">Si algo no funciona como quieres, lo ajusto. No desaparezco después de la instalación.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FAQ -->
+  <div class="sec">
+    <div class="accent-line"></div>
+    <h2 class="sec-title">Preguntas frecuentes</h2>
+    <div class="faq-item">
+      <div class="faq-q">¿Suena robótico? ¿Los pacientes lo van a notar?</div>
+      <div class="faq-a">No suena como un contestador automático. La conversación fluye de forma natural. Antes de activarlo, te muestro exactamente cómo suena con una demo real — ajustamos lo que haga falta hasta que estés cómodo.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">¿Tengo que cambiar mi sistema de agenda?</div>
+      <div class="faq-a">No. Se conecta a lo que ya usas. Si hay alguna limitación técnica con tu sistema concreto, te lo digo antes de empezar — sin sorpresas.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">¿Cumple con la normativa de protección de datos (RGPD)?</div>
+      <div class="faq-a">Sí. El sistema cumple con la normativa española. El contrato incluye las cláusulas de tratamiento de datos necesarias y los pacientes son informados al inicio de la llamada si esta se graba.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">¿Qué pasa si el asistente no sabe responder algo?</div>
+      <div class="faq-a">Tiene dos opciones: transferir la llamada a tu equipo en tiempo real, o tomar el mensaje y dejar una nota clara para devolver la llamada. Ningún paciente se queda colgado.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">¿Hay contrato largo o permanencia?</div>
+      <div class="faq-a">No. Empezamos con un periodo de prueba sin permanencia. Mi objetivo es que quieras quedarte porque ves resultados, no porque estés atado a un contrato.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">¿Cuánto tiempo tarda en estar listo?</div>
+      <div class="faq-a">Entre 7 y 10 días desde que confirmamos. Incluye configuración, conexión con tu agenda, pruebas y ajustes antes de activarlo.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">¿Funciona para mi tipo de clínica?</div>
+      <div class="faq-a">Está pensado para clínicas dentales, estéticas y de fisioterapia. Si tienes dudas sobre si encaja con tu caso concreto, en la llamada de 20 minutos lo vemos juntos — sin compromiso.</div>
+    </div>
+  </div>
+
+  <!-- CTA FINAL -->
+  <div class="sec">
+    <div class="cta-box">
+      <h2>¿Tiene sentido para tu clínica?</h2>
+      <p>Una llamada de 20 minutos es suficiente para saberlo.<br>Sin presentación de ventas. Sin compromiso.</p>
+      <div class="cta-btns">
+        <a href="https://calendly.com/cliniconnect/30min" target="_blank" class="btn-primary">→ Reservar llamada gratuita</a>
+        <a href="https://wa.me/34747496725" target="_blank" class="btn-ghost">WhatsApp</a>
+      </div>
+      <span class="cta-note">hola@clinicconnect.es</span>
+    </div>
+  </div>
+
+  <div class="footer">
+    © 2025 Clinic Connect · Madrid, España
+  </div>
+
+</div>
+</body>
+</html>
